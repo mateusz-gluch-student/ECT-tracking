@@ -8,13 +8,13 @@ class Matcher(ABC):
     template: np.ndarray = field(init=False)
 
     @abstractmethod
-    def initialize(input: np.ndarray):
+    def initialize(self, input: np.ndarray):
         pass
 
     @abstractmethod
-    def match(input: np.ndarray) -> np.ndarray:
+    def match(self, input: np.ndarray) -> np.ndarray:
         pass
 
     @abstractmethod
-    def update(input: np.ndarray, output: np.ndarray):
+    def update(self, input: np.ndarray, output: np.ndarray):
         pass

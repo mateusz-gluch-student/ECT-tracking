@@ -7,11 +7,11 @@ import numpy as np
 class Transformer(ABC):
 
     @abstractmethod
-    def transform(inp: np.ndarray) -> np.ndarray:
+    def transform(self, inp: np.ndarray) -> np.ndarray:
         pass
 
     @abstractmethod
-    def invert(inp: np.ndarray) -> np.ndarray:
+    def invert(self, inp: np.ndarray) -> np.ndarray:
         pass
 
 

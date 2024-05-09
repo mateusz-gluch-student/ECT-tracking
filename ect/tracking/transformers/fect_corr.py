@@ -5,8 +5,8 @@ from .transformer import Transformer
 
 class FECTCorrTransformer(Transformer):
 
-    def transform(inp: ndarray) -> ndarray:
+    def transform(self, inp: ndarray) -> ndarray:
         return super().transform()
     
-    def invert(inp: ndarray) -> ndarray:
+    def invert(self, inp: ndarray) -> ndarray:
         return super().invert()

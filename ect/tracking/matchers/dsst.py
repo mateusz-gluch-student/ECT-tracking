@@ -8,11 +8,11 @@ from .matcher import Matcher
 @dataclass(slots=True)
 class DSSTMatcher(Matcher):
 
-    def initialize(input: ndarray):
+    def initialize(self, input: ndarray):
         return super().initialize()
     
-    def match(input: ndarray) -> ndarray:
+    def match(self, input: ndarray) -> ndarray:
         return super().match()
     
-    def update(input: ndarray, output: ndarray):
+    def update(self, input: ndarray, output: ndarray):
         return super().update(output)
