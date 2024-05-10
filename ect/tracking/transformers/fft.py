@@ -1,14 +1,16 @@
 from dataclasses import dataclass, field
 
-from numpy import ndarray
+import numpy as np
 
 from .transformer import Transformer
+
+from ...configurators import Config
 
 @dataclass(slots=True)
 class FFTTransformer(Transformer):
 
-    def transform(self, inp: ndarray) -> ndarray:
-        return super().transform()
+    def transform(self, inp: np.ndarray) -> np.ndarray:
+        return np.fft.fft2(inp)
     
-    def invert(self, inp: ndarray) -> ndarray:
-        return super().invert()
+    def invert(self, inp: np.ndarray) -> np.ndarray:
+        return np.fft.ifft2(inp)
