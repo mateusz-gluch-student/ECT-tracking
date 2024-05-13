@@ -14,6 +14,8 @@ class FECTTransformer(Transformer):
     cfg: Config
     dsize: tuple[int, int]
     sidelobe: np.ndarray = field(init=False)
+    snf: np.ndarray = field(init=False)
+    fnf: np.ndarray = field(init=False)
 
     def __post_init__(self):
         self.sidelobe = sidelobe(self.dsize, self.cfg)
@@ -21,25 +23,29 @@ class FECTTransformer(Transformer):
         self.snf = spacenorm(self.dsize, self.cfg)
 
 
-    def transform(self, inp: np.ndarray) -> np.ndarray:
+    def transform(self, inp: np.ndarray, **kwargs) -> np.ndarray:
         cx, cy = inp.shape[0]//2, inp.shape[1]//2
         radius = min(inp.shape)//2
 
-        logimg = logpolar(inp, (cx, cy), self.dsize, radius, self.cfg)
-        logimg *= self.sidelobe
+        logpolar = kwargs.get("logpolar")
+        if logpolar is True or logpolar is None:
+            logimg = logpolar(inp, (cx, cy), self.dsize, radius, self.cfg)
+            logimg *= self.sidelobe
 
         out = fect(logimg, self.cfg)
-        out *= self.fnf
+        # out *= self.fnf
 
         return out
     
-    def invert(self, inp: np.ndarray) -> np.ndarray:
+    def invert(self, inp: np.ndarray, **kwargs) -> np.ndarray:
         dsize = (200, 200)
         radius = 100
 
         inv = ifect(inp, self.cfg)
-        inv *= self.snf
+        # inv *= self.snf
 
-        out = ilogpolar(inv, dsize, radius, self.cfg)
+        logpolar = kwargs.get("logpolar")
+        if logpolar is True or logpolar is None:
+            out = ilogpolar(inv, dsize, radius, self.cfg)
 
         return out

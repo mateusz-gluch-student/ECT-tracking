@@ -138,7 +138,7 @@ def mod_image(
 
     rhos, _, xs, _ = vectors((P, R), cfg)
     rhos = rhos[:P, :R]
-    xs = xs[:P, :R] + offset
+    xs = xs[:P, :R] + offset# * ect_factor
 
     if cfg.mode == "offset":
         image_padded[:P, :R] = np.conjugate(image) * \

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 # from pydantic import BaseModel, field
 
-from typing import Callable
+from typing import Callable, Iterable
 import numpy as np
 
 from .matchers import Matcher
@@ -13,11 +13,11 @@ class Tracker():
     generator: Generator
     matcher: Matcher
     transformer: Transformer
-    callback: Callable[[np.ndarray], None]
+    callback: Callable[[np.ndarray], None] = field(default=lambda x: None)
     outputs: list[np.ndarray] = field(init=False, default_factory=list)
 
 
-    def track(self):
+    def track(self) -> Iterable[np.ndarray]:
 
         init = True
 
@@ -29,7 +29,7 @@ class Tracker():
                 init = False
                 continue
 
-            self.track_single(image)
+            yield self.track_single(image)
 
 
     def track_single(self, image: np.ndarray):
@@ -39,4 +39,4 @@ class Tracker():
         self.outputs.append(match_out)
         self.matcher.update(tr_image, match_out)
         self.callback(match_out)
-        return 
+        return match_out

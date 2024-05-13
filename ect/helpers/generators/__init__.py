@@ -4,3 +4,4 @@ from .random import RandomImageGenerator
 from .sequence import SequenceImageGenerator
 from .single_image import SingleImageGenerator
 from .multimodal import MultimodalGenerator
+from .numeric_sequence import IdSequenceImageGenerator

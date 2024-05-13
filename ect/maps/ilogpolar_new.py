@@ -78,7 +78,7 @@ def ilogpolar(
         logger.debug("Running logpolar transform in offset mode")
         offset_bool: np.ndarray = (x_grid > 0).astype(int) 
         offset: np.ndarray = (offset_bool*2 - 1) * cfg.offset_value_px
-        x_grid += offset
+        x_grid -= offset
 
         rho_grid = np.log(x_grid*x_grid + y_grid*y_grid)/2
         phi_grid = np.arctan2(y_grid, x_grid) + cfg.start_angle_rad

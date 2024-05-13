@@ -7,7 +7,7 @@ import random
 
 import ect
 from .generator import Generator
-from ...helpers import sine_multimodal, Mode    
+from ..samples import sine_multimodal, Mode
 
 
 @dataclass(slots=True)

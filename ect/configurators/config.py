@@ -25,7 +25,7 @@ class Config(BaseModel):
     interpolation: Literal["bilinear", "none"] = Field(default="bilinear")
     start_angle_deg: float = Field(default=90)
     offset_value_px: int = Field(default=10)
-    ect_offset_value_px: int = Field(default=0)
+    ect_offset_value_px: int = Field(default=1)
 
     antialias: bool = True
     antialias_params: list[AntialiasParameters] = Field(default = None)

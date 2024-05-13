@@ -18,7 +18,7 @@ def splinefilt_rho(dsize: tuple[int, int], knots: list[float], cfg: Config) -> n
     min_rho = rhos[0, 0]
 
     x_knots = np.linspace(min_rho, max_rho, num_knots)
-    print(x_knots)
+    # print(x_knots)
     polyfilt = CubicSpline(x=x_knots, y=knots, bc_type='natural')
 
     return polyfilt(rhos, extrapolate=True)

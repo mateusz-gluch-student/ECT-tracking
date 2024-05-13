@@ -7,7 +7,7 @@ import random
 
 import ect
 from .generator import Generator
-from ...helpers import sine_unimodal, Mode    
+from ..samples import sine_unimodal, Mode
 
 @dataclass(slots=True)
 class UnimodalGenerator(Generator):

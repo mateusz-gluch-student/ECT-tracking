@@ -10,9 +10,11 @@ from .generator import Generator
 
 
 @dataclass(slots=True)
-class SequenceImageGenerator(Generator):
-    dirpath: str
-    idx: int = field(init = False, default=0)
+class IdSequenceImageGenerator(Generator):
+    pathspec: str
+    '''dirpath spec with "{id}" format spec'''
+    seqlen: int
+    idx: int = field(init = False, default=0) 
     _images: list[np.ndarray] = field(init=False, default_factory=list)
 
 
@@ -47,19 +49,18 @@ class SequenceImageGenerator(Generator):
         return img
 
     def generate(self) -> np.ndarray:
-        for root, _, files in os.walk(self.dirpath):
-            for file in files:
-                self._load_image(os.path.join(root, file))
+        for i in range(self.seqlen):
+            self._load_image(self.pathspec.format(id=i))
 
-        if self.idx >=len(self._images):
+        if self.idx >=len(self.images):
             self.idx = 0
 
-        ret = self._images[self.idx]
+        ret = self.images[self.idx]
         self.idx += 1
         return ret
 
 
     def images(self) -> Iterable[np.ndarray]:
-        for root, _, files in os.walk(self.dirpath):
-            for file in files:
-                yield self._load_image(os.path.join(root, file))
+
+        for i in range(self.seqlen):
+            yield self._load_image(self.pathspec.format(id=i))
