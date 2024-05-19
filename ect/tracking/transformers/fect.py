@@ -27,12 +27,12 @@ class FECTTransformer(Transformer):
         cx, cy = inp.shape[0]//2, inp.shape[1]//2
         radius = min(inp.shape)//2
 
-        logpolar = kwargs.get("logpolar")
-        if logpolar is True or logpolar is None:
-            logimg = logpolar(inp, (cx, cy), self.dsize, radius, self.cfg)
-            logimg *= self.sidelobe
+        lp = kwargs.get("logpolar")
+        if lp is True or lp is None:
+            inp = logpolar(inp, (cx, cy), self.dsize, radius, self.cfg)
+            inp *= self.sidelobe
 
-        out = fect(logimg, self.cfg)
+        out = fect(inp, self.cfg)
         # out *= self.fnf
 
         return out
@@ -42,10 +42,10 @@ class FECTTransformer(Transformer):
         radius = 100
 
         inv = ifect(inp, self.cfg)
-        # inv *= self.snf
+        inv *= self.snf
 
-        logpolar = kwargs.get("logpolar")
-        if logpolar is True or logpolar is None:
-            out = ilogpolar(inv, dsize, radius, self.cfg)
+        lp = kwargs.get("logpolar")
+        if lp is True or lp is None:
+            inv = ilogpolar(inv, dsize, radius, self.cfg)
 
-        return out
+        return inv

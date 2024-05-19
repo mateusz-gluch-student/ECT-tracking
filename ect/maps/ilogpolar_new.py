@@ -80,7 +80,7 @@ def ilogpolar(
         offset: np.ndarray = (offset_bool*2 - 1) * cfg.offset_value_px
         x_grid -= offset
 
-        rho_grid = np.log(x_grid*x_grid + y_grid*y_grid)/2
+        rho_grid = np.log(x_grid*x_grid + y_grid*y_grid + 1)/2
         phi_grid = np.arctan2(y_grid, x_grid) + cfg.start_angle_rad
         
     rho_grid *= (image.shape[1]-1)/np.log(radius)

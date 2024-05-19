@@ -27,29 +27,34 @@ class FECTCorrTransformer(Transformer):
         cx, cy = inp.shape[0]//2, inp.shape[1]//2
         radius = min(inp.shape)//2
 
-        logpolar = kwargs.get("logpolar")
-        if logpolar is True or logpolar is None:
-            logimg = logpolar(inp, (cx, cy), self.dsize, radius, self.cfg)
-            logimg *= self.sidelobe
+        lp = kwargs.get("logpolar")
+        if lp is True or lp is None:
+            inp = logpolar(inp, (cx, cy), self.dsize, radius, self.cfg)
+            inp *= self.sidelobe
 
-        ect = fect(logimg, self.cfg)
-        # ect *= self.fnf
-        out = np.fft.fft2(ect)
+        lp = kwargs.get("ect")
+        if lp is True or lp is None:
+            inp = fect(inp, self.cfg)
+            # inp *= self.fnf
+    
+        out = np.fft.fft2(inp)
 
         return out
     
     
     def invert(self, inp: np.ndarray, **kwargs) -> np.ndarray:
-        ect = np.fft.ifft2(inp)
+        inv = np.fft.ifft2(inp)
 
         dsize = (200, 200)
         radius = 100
+        
+        lp = kwargs.get("ect")
+        if lp is True or lp is None:
+            inv = ifect(inv, self.cfg)
+            # inv *= self.snf
 
-        inv = ifect(ect, self.cfg)
-        # inv *= self.snf
+        lp = kwargs.get("logpolar")
+        if lp is True or lp is None:
+            inv = ilogpolar(inv, dsize, radius, self.cfg)
 
-        logpolar = kwargs.get("logpolar")
-        if logpolar is True or logpolar is None:
-            out = ilogpolar(inv, dsize, radius, self.cfg)
-
-        return out
+        return inv

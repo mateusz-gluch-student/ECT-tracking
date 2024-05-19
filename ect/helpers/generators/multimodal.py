@@ -17,20 +17,22 @@ class MultimodalGenerator(Generator):
     offset: int = 10
     dsize: tuple[int, int] = (314, 100)
     image: np.ndarray = field(init=False)
+    logpolar: bool = field(default=True)
 
 
     def __post_init__(self):
         self.image = sine_multimodal((500, 500), self.modes)
 
-        cfg = ect.Config(offset_value_px=self.offset)
+        if self.logpolar:
+            cfg = ect.Config(offset_value_px=self.offset)
 
-        x, y = self.image.shape[0], self.image.shape[1]
-        cx, cy = x//2, y//2
-        r = min(cx, cy)
+            x, y = self.image.shape[0], self.image.shape[1]
+            cx, cy = x//2, y//2
+            r = min(cx, cy)
 
-        filt = ect.sidelobe(self.dsize, cfg)        
-        self.image = ect.logpolar_new(self.image, (cx, cy), self.dsize, r, cfg)
-        self.image *= filt
+            filt = ect.sidelobe(self.dsize, cfg)        
+            self.image = ect.logpolar_new(self.image, (cx, cy), self.dsize, r, cfg)
+            self.image *= filt
     
 
     def generate(self) -> np.ndarray:

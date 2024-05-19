@@ -12,22 +12,24 @@ class SingleImageGenerator(Generator):
     iterlen: int = 100
     offset: int = 10
     image: np.ndarray = field(init=False)
+    logpolar: bool = field(default=True)
 
 
     def __post_init__(self):
         self.image = cv2.imread(self.fpath)
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)/255
 
-        cfg = ect.Config(offset_value_px=self.offset)
+        if self.logpolar:
+            cfg = ect.Config(offset_value_px=self.offset)
 
-        x, y = self.image.shape[0], self.image.shape[1]
-        cx, cy = x//2, y//2
-        r = min(cx, cy)
-        dsize = (314, 100)
+            x, y = self.image.shape[0], self.image.shape[1]
+            cx, cy = x//2, y//2
+            r = min(cx, cy)
+            dsize = (314, 100)
 
-        filt = ect.sidelobe(dsize, cfg)        
-        self.image = ect.logpolar_new(self.image, (cx, cy), dsize, r, cfg)
-        self.image *= filt
+            filt = ect.sidelobe(dsize, cfg)        
+            self.image = ect.logpolar_new(self.image, (cx, cy), dsize, r, cfg)
+            self.image *= filt
     
 
     def generate(self) -> np.ndarray:
