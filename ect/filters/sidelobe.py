@@ -18,7 +18,7 @@ def sidelobe(dsize: tuple[int,int], cfg: Config) -> np.ndarray:
     Returns:
         np.ndarray: Sidelobe filter for 
     """
-    offset = cfg.offset_value_px
+    offset = cfg.offset_value_px//2
     slope = cfg.sidelobe_slope
 
     P, R = dsize
