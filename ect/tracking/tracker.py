@@ -12,7 +12,6 @@ from ..helpers import Generator
 class Tracker():
     generator: Generator
     matcher: Matcher
-    transformer: Transformer
     callback: Callable[[np.ndarray], None] = field(default=lambda x: None)
     outputs: list[np.ndarray] = field(init=False, default_factory=list)
 
@@ -24,8 +23,7 @@ class Tracker():
         for image in self.generator.images():
 
             if init:
-                tr_image = self.transformer.transform(image)
-                self.matcher.initialize(tr_image)
+                self.matcher.initialize(image)
                 init = False
                 continue
 
@@ -33,10 +31,8 @@ class Tracker():
 
 
     def track_single(self, image: np.ndarray):
-
-        tr_image = self.transformer.transform(image)
-        match_out = self.matcher.match(tr_image)
+        match_out = self.matcher.match(np.copy(image))
         self.outputs.append(match_out)
-        self.matcher.update(tr_image, match_out)
         self.callback(match_out)
-        return match_out
+        tpl = self.matcher.update(np.copy(image), match_out)
+        return image, match_out, tpl

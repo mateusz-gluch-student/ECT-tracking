@@ -16,6 +16,7 @@ class IdSequenceImageGenerator(Generator):
     seqlen: int
     idx: int = field(init = False, default=0) 
     _images: list[np.ndarray] = field(init=False, default_factory=list)
+    clahe: bool = True
 
 
     def __post__init__(self):
@@ -44,8 +45,14 @@ class IdSequenceImageGenerator(Generator):
 
     def _load_image(self, imgpath: str) -> np.ndarray:
         img = cv2.imread(imgpath)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)/255
-        self._images.append(img)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        # clahe = cv2.createCLAHE(clipLimit=5)
+        # img = clahe.apply(img)
+
+        # img = cv2.equalizeHist(img)
+
+        self._images.append(img/255)
         return img
 
     def generate(self) -> np.ndarray:
@@ -63,4 +70,4 @@ class IdSequenceImageGenerator(Generator):
     def images(self) -> Iterable[np.ndarray]:
 
         for i in range(self.seqlen):
-            yield self._load_image(self.pathspec.format(id=i))
+            yield self._load_image(self.pathspec.format(id=i+1))

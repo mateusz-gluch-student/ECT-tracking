@@ -138,7 +138,9 @@ def mod_image(
 
     rhos, _, xs, _ = vectors((P, R), cfg)
     rhos = rhos[:P, :R]
-    xs = xs[:P, :R] + offset# * ect_factor
+    xs = xs[:P, :R] + offset
+    # rhos = rhos[:P, R:]
+    # xs = xs[:P, R:] + offset# * ect_factor
 
     if cfg.mode == "offset":
         image_padded[:P, :R] = np.conjugate(image) * \
@@ -165,6 +167,7 @@ def shift(image: np.ndarray, cfg: Config) -> np.ndarray:
     P, R = image.shape[:2]
     _, _, xs, _ = vectors((2*P, R), cfg)
     xs -= other_offset
+    # xs = xs[:P, R:]
     xs = xs[:P, :R]
 
 

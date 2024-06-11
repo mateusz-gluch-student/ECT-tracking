@@ -28,14 +28,18 @@ class FECTCorrTransformer(Transformer):
         radius = min(inp.shape)//2
 
         lp = kwargs.get("logpolar")
+        center = kwargs.get("center")
+        if center is None:
+            center = (cx, cy)
+
         if lp is True or lp is None:
-            inp = logpolar(inp, (cx, cy), self.dsize, radius, self.cfg)
+            inp = logpolar(inp, center, self.dsize, radius, self.cfg)
             inp *= self.sidelobe
 
         lp = kwargs.get("ect")
         if lp is True or lp is None:
             inp = fect(inp, self.cfg)
-            # inp *= self.fnf
+            inp *= self.fnf
     
         out = np.fft.fft2(inp)
 

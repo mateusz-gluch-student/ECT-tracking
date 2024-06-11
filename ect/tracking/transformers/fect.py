@@ -33,7 +33,7 @@ class FECTTransformer(Transformer):
             inp *= self.sidelobe
 
         out = fect(inp, self.cfg)
-        # out *= self.fnf
+        out *= self.fnf
 
         return out
     

@@ -9,7 +9,7 @@ from typing import Callable
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
-from ..generators import Generator
+from ...helpers import Generator
 from ...configurators import Config
 
 @dataclass
