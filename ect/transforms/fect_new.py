@@ -6,9 +6,9 @@ from .utils_new import (
     antialias, 
     mod_image, 
     xcorr, 
-    shift,
-    fold_logpolar,
-    unfold_logpolar)
+    shift)
+    # fold_logpolar,
+    # unfold_logpolar)
 
 from ..helpers import vectors
 
@@ -28,7 +28,7 @@ def transform(inp: np.ndarray, cfg: Config) -> np.ndarray:
 
     image_padded = mod_image(inp, cfg)
     out = xcorr(image_padded, kernel)
-    out = out[:P, :R]
+    out = out[:P, R:]
     return shift(inp, cfg) * out if cfg.mode == "offset" else out
 
 
@@ -51,9 +51,9 @@ def fect(
     # image = fold_logpolar(image)
     P, _ = image.shape
     return transform(image, cfg)
-    out_right = transform(image[:P//2, :], cfg)
-    out_left = transform(image[P//2:, :], cfg)
-    return np.vstack([out_right, out_left])
+    # out_right = transform(image[:P//2, :], cfg)
+    # out_left = transform(image[P//2:, :], cfg)
+    # return np.vstack([out_right, out_left])
 
 def ifect(
     ect: cv2.Mat,
@@ -65,9 +65,9 @@ def ifect(
     cfg.validate()
     cfg.transform = "iect"
     return transform(ect, cfg)
-    P, _ = ect.shape
-    out_right = transform(ect[:P//2, :], cfg)
-    # out_right = cv2.normalize(out_right, None, 1, 0, cv2.NORM_MINMAX)
-    out_left = transform(ect[P//2:, :], cfg)
-    # out_left = cv2.normalize(out_right, None, 1, 0, cv2.NORM_MINMAX)
-    return np.vstack([out_right, out_left])
+    # P, _ = ect.shape
+    # out_right = transform(ect[:P//2, :], cfg)
+    # # out_right = cv2.normalize(out_right, None, 1, 0, cv2.NORM_MINMAX)
+    # out_left = transform(ect[P//2:, :], cfg)
+    # # out_left = cv2.normalize(out_right, None, 1, 0, cv2.NORM_MINMAX)
+    # return np.vstack([out_right, out_left])

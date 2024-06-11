@@ -6,17 +6,17 @@ from ..configurators import Config, AntialiasParameters
 from ..filters import sigmoid
 from ..helpers import vectors
 
-def fold_logpolar(image: np.ndarray) -> np.ndarray:
-    phi, RHO = image.shape[:2]
-    if phi % 2:
-        out = image[:phi//2+1, :] + image[phi//2:, :]*1j
-    else:    
-        out = image[:phi//2, :] + image[phi//2:, :]*1j
-    return out
+# def fold_logpolar(image: np.ndarray) -> np.ndarray:
+#     phi, RHO = image.shape[:2]
+#     if phi % 2:
+#         out = image[:phi//2+1, :] + image[phi//2:, :]*1j
+#     else:    
+#         out = image[:phi//2, :] + image[phi//2:, :]*1j
+#     return out
     
 
-def unfold_logpolar(image: np.ndarray) -> np.ndarray:
-    return np.vstack([np.real(image), np.imag(image)])
+# def unfold_logpolar(image: np.ndarray) -> np.ndarray:
+#     return np.vstack([np.real(image), np.imag(image)])
 
 
 def xcorr(A: np.ndarray, B: np.ndarray) -> np.ndarray:
@@ -134,19 +134,19 @@ def mod_image(
         ect_factor = -1
 
     P, R = image.shape[:2]
-    image_padded = np.zeros((2*P, 2*R), dtype=complex)
+    image_padded = np.zeros((P, 2*R), dtype=complex)
 
     rhos, _, xs, _ = vectors((P, R), cfg)
-    rhos = rhos[:P, :R]
-    xs = xs[:P, :R] + offset
+    rhos = rhos[:, :R]
+    xs = xs[:, :R] + offset
     # rhos = rhos[:P, R:]
     # xs = xs[:P, R:] + offset# * ect_factor
 
     if cfg.mode == "offset":
-        image_padded[:P, :R] = np.conjugate(image) * \
+        image_padded[:, :R] = np.conjugate(image) * \
             np.exp(2*rhos - ect_factor*2*np.pi*1j*other_offset*xs/R)
     elif cfg.mode == "omit":
-        image_padded[:P, :R] = np.conjugate(image) * np.exp(2*rhos)
+        image_padded[:, :R] = np.conjugate(image) * np.exp(2*rhos)
     else:
         raise AttributeError('logpolar mode not in ["offset", "omit"]')
 
@@ -165,10 +165,10 @@ def shift(image: np.ndarray, cfg: Config) -> np.ndarray:
         ect_factor = 1
 
     P, R = image.shape[:2]
-    _, _, xs, _ = vectors((2*P, R), cfg)
+    _, _, xs, _ = vectors((P, R), cfg)
     xs -= other_offset
     # xs = xs[:P, R:]
-    xs = xs[:P, :R]
+    xs = xs[:, :R]
 
 
     return np.exp(ect_factor*2*np.pi*1j*offset*xs/R)

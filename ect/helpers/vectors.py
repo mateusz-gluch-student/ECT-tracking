@@ -28,8 +28,8 @@ def vectors(shape: tuple[int, int], cfg: Config
 
     P, R = shape
 
-    gamma = np.linspace(-1, 1, 2*R, endpoint=False) * np.log(R)
-    phi = np.linspace(1e-9 ,2, 2*P, endpoint=False) * np.pi
+    gamma = np.linspace(0, 2, 2*R, endpoint=False) * np.log(R)
+    phi = np.linspace(0 ,1, P, endpoint=False) * 2*np.pi
     phi -= cfg.start_angle_rad
 
     gammas, phis = np.meshgrid(gamma, phi)

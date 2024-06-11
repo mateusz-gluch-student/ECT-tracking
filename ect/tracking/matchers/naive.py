@@ -31,11 +31,6 @@ class NaiveMatcher(Matcher):
         #input is not transformed here 
         tpl = self._prepare_window(image, self.template_shape, self.gt)
         
-        # if not self.logpolar:
-        #     tpl = self._prepare_window_cart(image, self.template_shape, self.gt)
-        # else:
-        #     tpl = self._prepare_window_logpolar(image, self.template_shape, self.gt)
-
         self.template = self.transformer.transform(tpl)
         return tpl
 
@@ -43,7 +38,8 @@ class NaiveMatcher(Matcher):
     def match(self, input: ndarray) -> ndarray:
         #input is not transformed here
         inp = self.transformer.transform(input, center=self.gt)
-        xcorr = np.conj(self.template) * inp
+        # xcorr = np.conj(self.template) * inp
+        xcorr = np.conj(inp) * self.template
 
         if self.logpolar:
             xcorr = np.conj(xcorr)
@@ -59,15 +55,12 @@ class NaiveMatcher(Matcher):
 
         
     def update(self, input: ndarray, output: ndarray):
-        self.gt = self._getposition(input, output)
-        tpl = self._prepare_window(input, self.template_shape, self.gt)        
-        # if not self.logpolar:
-        #     tpl = self._prepare_window_cart(input, self.template_shape, self.gt)
-        # else:
-        #     tpl = self._prepare_window_logpolar(input, self.template_shape, self.gt)
-
         if self.do_update_template:
+            self.gt = self._getposition(input, output)
+            tpl = self._prepare_window(input, self.template_shape, self.gt)        
             self.template = self.transformer.transform(tpl)
+        else:
+            tpl = np.zeros_like(input)
 
         return tpl
 

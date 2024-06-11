@@ -9,11 +9,8 @@ from ..configurators import Config
 def splinefilt_rho(dsize: tuple[int, int], knots: list[float], cfg: Config) -> np.ndarray:
     num_knots = len(knots)
     P, R = dsize
-    if P % 2:
-        rhos, _, _, _ = vectors((P//2+1, R), cfg)
-    else:
-        rhos, _, _, _ = vectors((P//2, R), cfg)
-    rhos = rhos[:P, R:]
+    rhos, _, _, _ = vectors((P, R), cfg)
+    rhos = rhos[:, :R]
     max_rho = rhos[-1, -1]
     min_rho = rhos[0, 0]
 
