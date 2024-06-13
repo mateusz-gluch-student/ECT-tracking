@@ -25,9 +25,9 @@ def dect(
     kernel = np.zeros(image.shape[:2], dtype=complex)
     
     rhos, phis, xs, ys = vectors((V, U), cfg)
-    rhos = rhos[:, :U]
-    xs = xs[:, :U]
-    ys = ys[:, :U]
+    rhos = rhos[:, U:]
+    xs = xs[:, U:]
+    ys = ys[:, U:]
 
     if cfg.mode == "offset":
         offset_bool: np.ndarray = (xs > 0).astype(int) 

@@ -21,11 +21,11 @@ class NaiveMatcher(Matcher):
     template_shape: tuple[int, int]
     transformer: Transformer
     tukey_alpha: float = field(default=0.75)
-    thresh: float = field(default=0.02)
+    thresh: float = field(default=0.1)
     template: np.ndarray = field(init=False)
     logpolar: bool = field(default=False)
     do_update_template: bool = field(default=True)    
-    offset: int = 10
+    offset: int = 5
     
     def initialize(self, image: ndarray) -> np.ndarray:
         #input is not transformed here 
@@ -38,11 +38,8 @@ class NaiveMatcher(Matcher):
     def match(self, input: ndarray) -> ndarray:
         #input is not transformed here
         inp = self.transformer.transform(input, center=self.gt)
-        # xcorr = np.conj(self.template) * inp
-        xcorr = np.conj(inp) * self.template
-
-        if self.logpolar:
-            xcorr = np.conj(xcorr)
+        xcorr = np.conj(self.template) * inp
+        # xcorr = np.conj(inp) * self.template
 
         xcorr_abs = np.abs(xcorr)
         xcorr_phase = xcorr/xcorr_abs
