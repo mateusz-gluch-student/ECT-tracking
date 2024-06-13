@@ -28,24 +28,16 @@ class ECTAntialiasOptimizer(ECTOptimizer):
         )
 
         self.ect_img = fect(img, ect_config)
-        # fnf = freqnorm(self.ect_img.shape, self.radius)[:, :, 0]
-        # self.ect_img = self.ect_img * fnf
-        
         self.inv = ifect(self.ect_img, ect_config)
-        # snf = spacenorm(self.inv.shape, self.radius)[:, :, 0]
-        # self.inv = self.inv * snf
-        self.inv = np.real(self.inv)
-        self.inv -= self.inv.min().min()
-        # filt2 = sidelobe(self.inv.shape, ect_config)
-        # self.inv *= filt2
 
-        # self.inv = cv2.normalize(self.inv, None, 0, 1, norm_type=cv2.NORM_MINMAX)
+        self.inv = np.real(self.inv)
+        self.inv = cv2.normalize(self.inv, None, 0, 1, norm_type=cv2.NORM_MINMAX)
 
         return self.inv
     
 
     def start(self, N: int) -> list[float]:
-        return [0.35, 0.1, 0.25]
+        return [0.49, 0.14, 0.25]
 
 
     def optim(self, **kwargs) -> optim.OptimizeResult:

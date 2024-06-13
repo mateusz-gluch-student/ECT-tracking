@@ -28,8 +28,8 @@ class ECTOptimizer(ABC):
     def loss(self, params: list[float]) -> float:
         '''Calculates loss function'''
         img = self.image.generate()
-        P, _ = img.shape
-        img = img[:P//2, :]
+        # P, _ = img.shape
+        # img = img[:P//2, :]
         return np.real(self.loss_fcn(self.transform(img, params), img))
 
 

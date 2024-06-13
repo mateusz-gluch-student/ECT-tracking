@@ -4,14 +4,13 @@ from dataclasses import dataclass
 import math
 from typing import Literal, Any
 
-DEFAULT_SNF = [1.747, 1.743, 1.731, 1.724, 1.708, 1.710, 
-               1.728, 1.723, 1.752, 1.749, 1.762, 1.862, 
-               1.888, 1.894, 1.850, 1.861, 1.720, 1.650, 1.578, 1.202]
+DEFAULT_SNF = [1.6175, 1.7390, 1.9404, 2.1780, 2.2013, 2.2393, 
+               2.2169, 2.2180, 2.1818, 2.0851, 2.1757, 2.1821, 
+               2.2178, 2.1828, 2.2628, 2.1157, 2.3304, 2.0736, 2.2568, 1.1056]
 
-
-DEFAULT_FNF = [1.000, 0.000, 1.663, 0.794, 1.161, 0.994, 
-               1.246, 1.046, 1.048, 1.018, 1.043, 1.049, 
-               1.013, 1.059, 1.012, 1.024, 0.997, 0.871, 0.888, 0.582]
+DEFAULT_FNF = [1.3347, -0.1276, 0.7737, 0.4291, 0.8655, 0.9544, 
+               0.9387, 0.9636, 0.9533, 0.9668, 0.9320, 0.9144, 
+               0.9395, 0.9503, 0.9899, 0.9316, 0.9708, 0.8407, 1.0149, 0.2355]
 
 
 class AntialiasParameters(BaseModel): 
@@ -24,12 +23,12 @@ class Config(BaseModel):
     mode: Literal["offset", "omit", "opencv"] = Field(default="offset")
     interpolation: Literal["bilinear", "none"] = Field(default="bilinear")
     start_angle_deg: float = Field(default=90)
-    offset_value_px: int = Field(default=10)
-    ect_offset_value_px: int = Field(default=1)
+    offset_value_px: float = Field(default=10)
+    ect_offset_value_px: float = Field(default=1)
 
     antialias: bool = True
     antialias_params: list[AntialiasParameters] = Field(default = None)
-    antialias_factors: tuple[float, float] = [0.398, 0.113]
+    antialias_factors: tuple[float, float] = [0.49, 0.14]
     transform: Literal["ect", "iect"] = Field(default="ect")
 
     sidelobe_slope: float = 0.25

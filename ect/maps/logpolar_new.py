@@ -24,11 +24,11 @@ def logpolar(
 
     xc, yc = center
 
-    phi_range: np.ndarray = np.linspace(1/dsize[0], 2, dsize[0]) * np.pi
+    phi_range: np.ndarray = np.linspace(1e-9, 2, dsize[0], endpoint=False) * np.pi
     phi_range -= cfg.start_angle_rad
 
     r = np.log(radius)
-    rho_range: np.ndarray = np.linspace(1/r, 1, dsize[1]) * r
+    rho_range: np.ndarray = np.linspace(1e-9, 1, dsize[1], endpoint=False) * r
 
     rho_grid, phi_grid = np.meshgrid(rho_range, phi_range)
 
@@ -48,11 +48,10 @@ def logpolar(
         y_grid = (np.exp(rho_grid)-blind) * np.sin(phi_grid) + yc
     else:
         logger.debug(f"Running logpolar transform in offset mode offset={cfg.offset_value_px}")
-        x_grid = np.exp(rho_grid) * np.cos(phi_grid) + xc
+        x_grid = np.exp(rho_grid) * np.cos(phi_grid) + xc# + cfg.offset_value_px
 
         offset_bool: np.ndarray = (np.cos(phi_grid) > 0).astype(int) 
         offset: np.ndarray = (offset_bool*2 - 1) * cfg.offset_value_px
-
         x_grid = x_grid + offset
         y_grid = np.exp(rho_grid) * np.sin(phi_grid) + yc
 

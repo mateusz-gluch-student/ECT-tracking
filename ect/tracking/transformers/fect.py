@@ -37,6 +37,7 @@ class FECTTransformer(Transformer):
 
         return out
     
+    
     def invert(self, inp: np.ndarray, **kwargs) -> np.ndarray:
         dsize = (200, 200)
         radius = 100

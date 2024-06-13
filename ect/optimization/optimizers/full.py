@@ -58,9 +58,12 @@ class ECTFullOptimizer(ECTOptimizer):
 
     def optim(self, **kwargs) -> optim.OptimizeResult:
 
+        fnf = kwargs.pop("fnf")
+        snf = kwargs.pop("snf")
+
         result = optim.minimize(
             fun = self.loss,
-            x0 = self.start(self.n_knots*2+3),
+            x0 = self.start(self.n_knots*2+3, fnf=fnf, snf=snf),
             callback = self.callback,
             **kwargs
         )
@@ -68,14 +71,17 @@ class ECTFullOptimizer(ECTOptimizer):
         return result
     
 
-    def start(self, N): 
+    def start(self, N, **kwargs):
 
-        self.fnf = [3.183, -2.054, 1.522, 0.821, 1.511, 0.907, 1.114, 0.934, 1.085, 1.063, 0.979, 1.051, 0.941, 1.005, 0.983, 0.978, 1.079, 1.027, 0.818, 0.608]
+        self.fnf = kwargs.get("fnf")
+        self.snf = kwargs.get("snf")
 
-        # self.snf = np.ones((N,))
-        self.snf = [1.747, 1.743, 1.731, 1.724, 1.708, 1.710, 1.728, 1.723, 1.752, 1.749, 1.762, 1.862, 1.888, 1.894, 1.850, 1.861, 1.720, 1.650, 1.578, 1.202]
+        if not self.fnf:
+            self.fnf = np.ones((self.n_knots,))
+        
+        if not self.snf:
+            self.snf = np.ones((self.n_knots,))
 
-
-        return [*self.fnf, *self.snf, 0.366, 0.117]
+        return [*self.fnf, *self.snf, 0.49, 0.14]
 
 

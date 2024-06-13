@@ -16,8 +16,8 @@ from ect import sidelobe, Config
 #     return -20*np.log10(1/(rms(rmsn(template)-rmsn(img))+1e-9))
 
 def snr(img: np.ndarray, template: np.ndarray) -> float:
-    inorm = cv2.normalize(img, None, 1, 0, cv2.NORM_L2)
-    tnorm = cv2.normalize(template, None, 1, 0, cv2.NORM_L2)
+    inorm = cv2.normalize(img, None, 1, 0, cv2.NORM_L2).astype(np.float128)
+    tnorm = cv2.normalize(template, None, 1, 0, cv2.NORM_L2).astype(np.float128)
     rms = np.square(inorm-tnorm).sum().sum()
     return 10*np.log10(rms+1e-12)
 

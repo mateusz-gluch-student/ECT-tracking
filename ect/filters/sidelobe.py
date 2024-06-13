@@ -23,5 +23,5 @@ def sidelobe(dsize: tuple[int,int], cfg: Config) -> np.ndarray:
 
     P, R = dsize
     _, _, xs, _ = vectors((P, R), cfg)
-    xs = xs[: , :R]
+    xs = xs[: , R:]
     return sigmoid((xs-offset)/slope) + sigmoid((-xs-offset)/slope)

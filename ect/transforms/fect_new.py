@@ -28,7 +28,7 @@ def transform(inp: np.ndarray, cfg: Config) -> np.ndarray:
 
     image_padded = mod_image(inp, cfg)
     out = xcorr(image_padded, kernel)
-    out = out[:P, R:]
+    out = out[:, :R]
     return shift(inp, cfg) * out if cfg.mode == "offset" else out
 
 
